@@ -1,5 +1,5 @@
 import unittest
-import SPE_MiniProject.calculator1 as calculator1
+import calculator1
 
 class TestCalculator(unittest.TestCase):
 
