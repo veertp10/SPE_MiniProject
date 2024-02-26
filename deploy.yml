@@ -4,19 +4,25 @@
   remote_user: veerendra
   become: false
   tasks:
+    - name: Install Docker Python library
+      pip:
+        name: docker
+        state: present
+
     - name: Pull Docker Image
       docker_image:
-        name: "veerendragoudatp10/calculator:latest"  # Include the tag here
+        name: "veerendragoudatp10/calculator:latest"
         source: pull
       register: docker_pull_result
 
     - name: Display Docker Pull Result
       debug:
         var: docker_pull_result
-        
+
     - name: Start Docker service
       service:
         name: docker
         state: started
+
     - name: Running container
-      shell: docker run -it -d --name calculator veerendragoudatp10/calculator:latest  # Include the tag here as well
+      shell: docker run -it -d --name calculator veerendragoudatp10/calculator:latest
