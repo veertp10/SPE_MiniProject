@@ -5,7 +5,8 @@ class TestCalculator(unittest.TestCase):
 
     def test_square_root(self):   
         self.assertAlmostEqual(calculator1.square_root(25), 5.0)    
-        self.assertAlmostEqual(calculator1.square_root(9), 3.0)    
+        self.assertAlmostEqual(calculator1.square_root(9), 3.0) 
+        self.assertAlmostEqual(calculator1.square_root(16), 4.0) 
 
     def test_factorial(self):     
         self.assertEqual(calculator1.factorial(5), 120)   
