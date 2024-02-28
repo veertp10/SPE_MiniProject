@@ -11,3 +11,4 @@ COPY test.py /app/test.py
 
 
 CMD printf "1\n4\n3\n" | python3 calculator1.py
+#yess
