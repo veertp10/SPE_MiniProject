@@ -4,9 +4,9 @@ pipeline {
     environment {
         DOCKER_IMAGE_NAME = 'calculator'
         GITHUB_REPO_URL = 'https://github.com/veertp10/SPE_MiniProject.git'
-	OPTION = 1
-	NUMBER = 2
-	EXP = 3
+        OPTION = 1
+        NUMBER = 2
+        EXP = 3
     }
 
     stages {
@@ -19,7 +19,6 @@ pipeline {
             }
         }
 
-	
         stage('Run Main Application') {
             steps {
                 script {
@@ -28,7 +27,6 @@ pipeline {
             }
         }
 
-
         stage('Run Tests') {
             steps {
                 script {
@@ -36,7 +34,6 @@ pipeline {
                 }
             }
         }
-
 
         stage('Build Docker Image') {
             steps {
@@ -49,25 +46,44 @@ pipeline {
 
         stage('Push Docker Images') {
             steps {
-                script{
+                script {
                     docker.withRegistry('', 'DockerHubCred') {
-                    sh 'docker tag calculator veerendragoudatp10/calculator:latest'
-                    sh 'docker push veerendragoudatp10/calculator'
+                        sh 'docker tag calculator veerendragoudatp10/calculator:latest'
+                        sh 'docker push veerendragoudatp10/calculator'
                     }
-                 }
+                }
             }
         }
 
-   stage('Run Ansible Playbook') {
+        stage('Run Ansible Playbook') {
             steps {
                 script {
                     ansiblePlaybook(
                         playbook: 'deploy.yml',
                         inventory: 'inventory'
-                     )
+                    )
                 }
             }
         }
+    }
 
+    post {
+        success {
+            emailext (
+                subject: "Success: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                body: """<p>Job URL: <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>""",
+                to: 'veerendragoudatp40@gmail.com',
+                mimeType: 'text/html'
+            )
+        }
+
+        failure {
+            emailext (
+                subject: "Failure: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                body: """<p>Job URL: <a href='${env.BUILD_URL}'>${env.BUILD_URL}</a></p>""",
+                to: 'veerendragoudatp40@gmail.com',
+                mimeType: 'text/html'
+            )
+        }
     }
 }
